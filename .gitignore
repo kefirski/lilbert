@@ -12,6 +12,7 @@ build/
 develop-eggs/
 dist/
 downloads/
+experimentation.py
 eggs/
 .eggs/
 lib/
