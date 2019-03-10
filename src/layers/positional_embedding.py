@@ -8,6 +8,7 @@ class PostionalEmbedding(layers.Layer):
         super(PostionalEmbedding, self).__init__()
 
         self.embedding_size = embedding_size
+        self.test = [layers.Dense(10)]
 
     def call(self, input, t):
         b_s, s_l = input.shape
@@ -24,7 +25,7 @@ class PostionalEmbedding(layers.Layer):
         positional[:, :, 0::2] = tf.math.sin(_positional[:, :, 0::2])
         positional[:, :, 1::2] = tf.math.cos(_positional[:, :, 1::2])
 
-        _additional = t / js
+        _additional = (t + 1) / js
         additional = np.zeros(_additional.shape)
 
         additional[:, :, 0::2] = tf.math.sin(additional[:, :, 0::2])
@@ -33,7 +34,7 @@ class PostionalEmbedding(layers.Layer):
         return tf.constant(positional) + tf.constant(additional)
 
     def pos_indices(self, input):
-        b_s, s_l = input.shape
+        b_s, s_l, *_ = input.shape
         return tf.tile(
             tf.expand_dims(tf.range(1, s_l + 1, dtype=tf.float32), 0), [b_s, 1]
         )
