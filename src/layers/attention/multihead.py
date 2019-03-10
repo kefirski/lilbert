@@ -7,15 +7,15 @@ from . import ScaledDotProductAttention
 
 
 class MultiHeadAttention(layers.Layer):
-    def __init__(self, n_heads, dropout=0.1):
+    def __init__(self, n_heads, drop_p=0.1):
         """
         :param n_heads: Number of attention heads
-        :param dropout: drop prob
+        :param drop_p: dropout prob
         """
         super(MultiHeadAttention, self).__init__()
 
         self.n_heads = n_heads
-        self.drop_prob = dropout
+        self.drop_p = drop_p
 
     def build(self, input_shape):
         self.h_s = input_shape[-1]
@@ -31,7 +31,7 @@ class MultiHeadAttention(layers.Layer):
         self.attention = ScaledDotProductAttention()
 
         self.out = keras.Sequential(
-            [layers.Dense(self.h_s), layers.Dropout(self.drop_prob)]
+            [layers.Dense(self.h_s), layers.Dropout(self.drop_p)]
         )
 
         self.layer_norm = LayerNormalization(-1)
